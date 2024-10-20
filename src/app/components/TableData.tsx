@@ -1,35 +1,44 @@
-import React from 'react'
+import React, { useMemo } from "react";
+import useStore from "../utils/store";
 
-const TableData = () => {
-  const sampleData = [
-    { callValue: "$150", strikePrice: "$145", putValue: "$5" },
-    { callValue: "$200", strikePrice: "$195", putValue: "$3" },
-    { callValue: "$120", strikePrice: "$115", putValue: "$2" },
-  ];
+const TableData = ({ callClose, strike, putClose, contracts }) => {
+  const selectedExpiry = useStore((state) => state.selectedExpiry);
+  const selectedContractItem = useStore((state) => state.selectedContractItem);
+  const contractOPT = (contracts && contracts[selectedContractItem]) || {};
+
+  const { myCEId, myPEId } = useMemo(() => {
+    const expiryOPT = contractOPT.OPT || {};
+    const strikeOPT = expiryOPT[selectedExpiry] || [];
+
+    console.log("strike otp is", contractOPT);
+
+    const myStrikeCE = strikeOPT.find(
+      (item) => item.option_type === "CE" && item.strike === strike
+    );
+
+    const myStrikePE = strikeOPT.find(
+      (item) => item.option_type === "PE" && item.strike === strike
+    );
+    return {
+      strikeOPT,
+      myCEId: myStrikeCE?.token,
+      myPEId: myStrikePE?.token,
+    };
+  }, [contractOPT, selectedExpiry, strike]);
+
   return (
     <>
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th className="py-3 px-6 text-left">Call VALUE</th>
-            <th className="py-3 px-6 text-left">Strike Price</th>
-            <th className="py-3 px-6 text-left">PUT VALUE</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-600 text-sm font-light">
-          {sampleData.map((data, index) => (
-            <tr key={index} className="border-b border-gray-300 hover:bg-gray-100">
-              <td className="py-3 px-6">{data.callValue}</td>
-              <td className="py-3 px-6">{data.strikePrice}</td>
-              <td className="py-3 px-6">{data.putValue}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <tr className="border-b border-gray-300 hover:bg-gray-100">
+        <td id={myCEId} className="py-3 px-6">
+          {callClose !== null ? callClose : "-"}
+        </td>
+        <td className="py-3 px-6 font-bold">{strike !== null ? strike : "-"}</td>
+        <td id={myPEId} className="py-3 px-6">
+          {putClose !== null ? putClose : "-"}
+        </td>
+      </tr>
     </>
-  )
-}
+  );
+};
 
-export default TableData
+export default TableData;

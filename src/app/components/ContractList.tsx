@@ -1,52 +1,54 @@
 "use client";
 import React, { useState } from "react";
+import useStore from "../utils/store";
 
-const ContractList = () => {
-  const [selectedValue, setSelectedValue] = useState("");
+const ContractList = ({ items }: { items: string[] }) => {
+  const selectedContractItem = useStore((state) => state.selectedContractItem);
+  const setSelectedContractItem = useStore(
+    (state) => state.setSelectedContractItem
+  );
   const [isOpen, setIsOpen] = useState(false);
 
-  const options = ["NIFTYBANK", "SENSEX", "NIFTY50"];
-
-  const handleSelect = (value) => {
-    setSelectedValue(value);
+  const handleSelectChange = (value: string) => {
+    setSelectedContractItem(value);
     setIsOpen(false);
   };
 
   return (
-    <>
-      <div className="w-full max-w-xs mx-auto">
-        {/* Dropdown container */}
-        <div className="relative" onClick={() => setIsOpen(!isOpen)}>
-          {/* Selected value box */}
-          <div
-            className={`w-full bg-green-300 text-center text-gray-700 py-3 rounded-lg cursor-pointer ${
-              isOpen ? "border border-green-500" : ""
-            }`}
-          >
-            <span>{selectedValue ? selectedValue : "Select an option"}</span>
-            {/* Down arrow icon */}
-            <span className="m-2">{isOpen ? "▲" : "▼"}</span>
-          </div>
-
-          {/* Dropdown list */}
-          {isOpen && (
-            <ul className="absolute  max-w-xs bg-white shadow-lg rounded-lg mt-1 z-10 md:w-[full] sm:w-[40vw]">
-              {options.map((option) => (
-                <li
-                  key={option}
-                  className="py-2 px-4 hover:bg-green-100 cursor-pointer text-center"
-                  onClick={() => handleSelect(option)}
-                >
-                  <span className="block w-full whitespace-normal">
-                    {option}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+    <div className="w-full max-w-xs mx-auto">
+      {/* Dropdown container */}
+      <div className="relative" onClick={() => setIsOpen(!isOpen)}>
+        {/* Selected value box */}
+        <div
+          className={`w-full bg-green-300 text-center text-gray-700 py-3 rounded-lg cursor-pointer ${
+            isOpen ? "border border-green-500" : ""
+          }`}
+        >
+          <span>
+            {selectedContractItem || "Select a Contract"}
+          </span>
+          {/* Down arrow icon */}
+          <span className="">{isOpen ? "▲" : "▼"}</span>
         </div>
+
+        {/* Dropdown list */}
+        {isOpen && (
+          <ul className="absolute max-w-xs bg-white shadow-lg rounded-lg mt-1 z-10 md:w-full sm:w-[40vw]">
+            {items.map((item, index) => (
+              <li
+                key={index}
+                className="py-2 px-4 hover:bg-green-100 cursor-pointer text-center"
+                onClick={() => handleSelectChange(item)} // Corrected the event handler
+              >
+                <span className="block w-full whitespace-normal">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
