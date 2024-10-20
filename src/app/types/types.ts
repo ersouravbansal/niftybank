@@ -1,8 +1,10 @@
 // types.ts
 
-export type ContractData = object | null;
+export type ContractData = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+} | null;
 export type ContractKeys = string[];
-// export type OptionChainData = object | null;
 export interface OptionChainData {
   options: {
     [expiry: string]: {
@@ -35,15 +37,16 @@ export interface ContractOption {
   strike: number;
   token: string;
 }
-
-// export interface Contracts {
-//   [contractName: string]: {
-//     OPT?: {
-//       [expiry: string]: ContractOption[];
-//     };
-//   };
-// }
-
+export interface WebSocketLTP {
+  token: string;
+  timestamp: string;
+  ltp: number;
+  bb_qty: number;
+  bb_price: number;
+  ba_qty: number;
+  ba_price: number;
+  vol_in_day: number;
+}
 export interface TableDataProps {
   callClose: number | null;
   strike: number | null;

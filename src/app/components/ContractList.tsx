@@ -21,7 +21,7 @@ const ContractList = ({ items }: { items: ContractKeys }) => {
       <div className="relative" onClick={() => setIsOpen(!isOpen)}>
         {/* Selected value box */}
         <div
-          className={`w-full bg-green-300 text-center text-gray-700 py-3 rounded-lg cursor-pointer ${
+          className={`w-full bg-green-300 text-center text-gray-700 py-3 md:px-12 px-4 rounded-lg cursor-pointer ${
             isOpen ? "border border-green-500" : ""
           }`}
         >

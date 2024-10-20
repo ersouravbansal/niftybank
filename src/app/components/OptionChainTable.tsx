@@ -5,22 +5,25 @@ import ContractList from "./ContractList";
 import ExpiryDateFilter from "./ExpiryDateFilter";
 import useStore from "../utils/store";
 import Spinner from "./Spinner";
+import { WebSocketLTP } from "../types/types";
+import { fetchContractsData, fetchOptionChainData } from "@/api/apiRequest";
 
 const OptionChainTable = () => {
   const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<Error | null>(null);
-  
+
   const contractData = useStore((state) => state.contractData);
   const setContractData = useStore((state) => state.setContractData);
-  
+
   const contractKeys = useStore((state) => state.contractKeys);
   const setContractKeys = useStore((state) => state.setContractKeys);
-  
+
   const optionChainData = useStore((state) => state.optionChainData);
   const setOptionChainData = useStore((state) => state.setOptionChainData);
-  
+
   const selectedContractItem = useStore((state) => state.selectedContractItem);
-  
+
   const selectedExpiry = useStore((state) => state.selectedExpiry);
   const setSelectedExpiry = useStore((state) => state.setSelectedExpiry);
 
@@ -30,43 +33,35 @@ const OptionChainTable = () => {
 
   // Fetch contract data on component mount
   useEffect(() => {
-    const fetchContractsData = async () => {
-      try {
-        const response = await fetch("https://prices.algotest.xyz/contracts");
-        const data = await response.json();
+    fetchContractsData()
+      .then((data) => {
         const keys = Object.keys(data);
         setContractData(data);
         setContractKeys(keys);
-        console.log("Contract keys:", keys, "| Contract data:", data);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error("Error occurred while fetching contracts data:", error);
         setError(error as Error);
-      }
-    };
-
-    fetchContractsData();
+      });
   }, [setContractData, setContractKeys]);
 
   // Fetch option chain data when selected contract item changes
   useEffect(() => {
     if (selectedContractItem) {
-      const fetchOptionChainData = async () => {
-        try {
-          const response = await fetch(
-            `https://prices.algotest.xyz/option-chain-with-ltp?underlying=${selectedContractItem}`
-          );
-          const data = await response.json();
+      fetchOptionChainData(selectedContractItem)
+        .then((data) => {
           setOptionChainData(data);
           setSelectedExpiry(Object.keys(data.options)[0]);
-        } catch (error) {
-          console.error("Error occurred while fetching option chain data:", error);
+        })
+        .catch((error) => {
+          console.error(
+            "Error occurred while fetching option chain data:",
+            error
+          );
           setError(error as Error);
-        }
-      };
-
-      fetchOptionChainData();
+        });
     }
-  }, [selectedContractItem, setOptionChainData, setSelectedExpiry]);
+  }, [selectedContractItem]);
 
   // Set loading state based on data availability
   useEffect(() => {
@@ -100,8 +95,8 @@ const OptionChainTable = () => {
 
       socket.addEventListener("message", (event) => {
         const response = JSON.parse(event.data);
-        console.log("websocket response:",response)
-        response?.ltp?.forEach((item) => {
+        console.log("websocket response:", response);
+        response?.ltp?.forEach((item: WebSocketLTP) => {
           const element = document.getElementById(item.token);
           if (element) {
             element.innerText = item.ltp.toFixed(2);
@@ -117,10 +112,16 @@ const OptionChainTable = () => {
   }, [selectedExpiry, selectedContractItem]);
 
   // Prepare option data for rendering
-  const expiryDates = optionChainData?.options ? Object.keys(optionChainData.options) : [];
+  const expiryDates = optionChainData?.options
+    ? Object.keys(optionChainData.options)
+    : [];
 
   const optionData = expiryDates.reduce((acc, expiry) => {
-    const { strike = [], call_close = [], put_close = [] } = optionChainData?.options?.[expiry] || [];
+    const {
+      strike = [],
+      call_close = [],
+      put_close = [],
+    } = optionChainData?.options?.[expiry] || {};
     acc[expiry] = {
       strikePrices: strike,
       callClosePrices: call_close,
@@ -130,7 +131,8 @@ const OptionChainTable = () => {
   }, {} as Record<string, { strikePrices: number[]; callClosePrices: number[]; putClosePrices: number[] }>);
 
   // Destructure the data for easier access
-  const { strikePrices, callClosePrices, putClosePrices } = optionData[selectedExpiry] || [];
+  const { strikePrices, callClosePrices, putClosePrices } =
+    optionData[selectedExpiry] || [];
 
   return (
     <>
@@ -138,11 +140,11 @@ const OptionChainTable = () => {
         <Spinner />
       ) : (
         <>
-          <div className="flex">
-            <div className="w-1/4 p-4">
+          <div className="flex flex-wrap mx-2">
+            <div className="py-4">
               <ContractList items={contractKeys} />
             </div>
-            <div className="w-3/4 p-4 justify-start">
+            <div className="py-4 mx-4 md:w-3/4 w-full justify-start">
               <ExpiryDateFilter
                 expiries={expiryDates}
                 selectedExpiry={selectedExpiry}
@@ -150,25 +152,26 @@ const OptionChainTable = () => {
               />
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300">
+          <div className="overflow-x-auto flex justify-center">
+            <table className=" bg-white border border-gray-300 md:w-2/3 w-full mx-6">
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-left">Call Price</th>
-                  <th className="py-3 px-6 text-left">Strike</th>
+                  <th className="py-3 px-6 text-right">Call Price</th>
+                  <th className="py-3 px-6 text-center ">Strike</th>
                   <th className="py-3 px-6 text-left">PUT Price</th>
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
-                {selectedExpiry && strikePrices?.map((strike, index) => (
-                  <TableData
-                    key={index}
-                    callClose={callClosePrices?.[index]}
-                    strike={strike}
-                    putClose={putClosePrices?.[index]}
-                    contracts={contractData}
-                  />
-                ))}
+                {selectedExpiry &&
+                  strikePrices?.map((strike, index) => (
+                    <TableData
+                      key={index}
+                      callClose={callClosePrices?.[index]}
+                      strike={strike}
+                      putClose={putClosePrices?.[index]}
+                      contracts={contractData}
+                    />
+                  ))}
               </tbody>
             </table>
           </div>

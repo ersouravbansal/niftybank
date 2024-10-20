@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { StoreState } from "../types/types"
 const useStore = create<StoreState>((set) => ({
   contractData: null,
-  contractKeys: null,
+  contractKeys: [],
   optionChainData: null,
   selectedContractItem: "BANKNIFTY",
-  selectedExpiry: null,
+  selectedExpiry: "",
   setContractData: (newValue) => set({ contractData: newValue }),
   setContractKeys: (newValue) => set({ contractKeys: newValue }),
   setOptionChainData: (newValue) => set({ optionChainData: newValue }),
