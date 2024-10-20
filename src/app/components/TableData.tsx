@@ -16,14 +16,23 @@ const TableData: React.FC<TableDataProps> = ({
     const expiryOPT = contractOPT.OPT || {};
     const strikeOPT = expiryOPT[selectedExpiry] || [];
 
-    console.log("strike opt is", contractOPT);
+    console.log(
+      "contract OPT:",
+      contractOPT,
+      "| expiryOPT:",
+      expiryOPT,
+      "| strike OPT:",
+      strikeOPT
+    );
 
     const myStrikeCE = strikeOPT.find(
-      (item:ContractOption) => item.option_type === "CE" && item.strike === strike
+      (item: ContractOption) =>
+        item.option_type === "CE" && item.strike === strike
     );
 
     const myStrikePE = strikeOPT.find(
-      (item:ContractOption) => item.option_type === "PE" && item.strike === strike
+      (item: ContractOption) =>
+        item.option_type === "PE" && item.strike === strike
     );
     return {
       strikeOPT,

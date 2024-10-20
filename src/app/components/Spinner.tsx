@@ -3,6 +3,7 @@ import React from "react";
 export default function Spinner() {
   return (
     <>
+    {/* Loading Spinner using Tailwind */}
       <div role="status" className="flex items-center justify-center p-3">
         <svg
           aria-hidden="true"

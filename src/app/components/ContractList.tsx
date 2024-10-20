@@ -37,7 +37,7 @@ const ContractList = ({ items }: { items: ContractKeys }) => {
               <li
                 key={index}
                 className="py-2 px-4 hover:bg-green-100 cursor-pointer text-center"
-                onClick={() => handleSelectChange(item)} // Corrected the event handler
+                onClick={() => handleSelectChange(item)}
               >
                 <span className="block w-full whitespace-normal">{item}</span>
               </li>

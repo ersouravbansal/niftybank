@@ -9,8 +9,10 @@ const ExpiryDateFilter: React.FC<ExpiryFilterProps> = ({
 }) => {
   return (
     <>
+    {/* Expiry Date Container */}
       <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-thin scrollbar-thumb-green-400 scrollbar-thumb-rounded-full scrollbar-w-1">
         {expiries.map((expiry) => (
+          // Expiry Date Buttons
           <button
             key={expiry}
             onClick={() => onChange(expiry)}

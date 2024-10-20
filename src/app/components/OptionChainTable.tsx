@@ -111,7 +111,7 @@ const OptionChainTable = () => {
     }
   }, [selectedExpiry, selectedContractItem]);
 
-  // Prepare option data for rendering
+  // Option data for rendering
   const expiryDates = optionChainData?.options
     ? Object.keys(optionChainData.options)
     : [];
@@ -130,7 +130,7 @@ const OptionChainTable = () => {
     return acc;
   }, {} as Record<string, { strikePrices: number[]; callClosePrices: number[]; putClosePrices: number[] }>);
 
-  // Destructure the data for easier access
+  // Destructuring the data 
   const { strikePrices, callClosePrices, putClosePrices } =
     optionData[selectedExpiry] || [];
 
