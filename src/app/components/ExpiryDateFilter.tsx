@@ -1,11 +1,6 @@
 "use client";
 import React from "react";
-
-interface ExpiryFilterProps {
-  expiries: string[];
-  selectedExpiry: string | null;
-  onChange: (expiry: string) => void;
-}
+import { ExpiryFilterProps } from "../types/types";
 
 const ExpiryDateFilter: React.FC<ExpiryFilterProps> = ({
   expiries,

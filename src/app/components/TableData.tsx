@@ -1,7 +1,13 @@
 import React, { useMemo } from "react";
 import useStore from "../utils/store";
+import { TableDataProps } from "../types/types";
 
-const TableData = ({ callClose, strike, putClose, contracts }) => {
+const TableData: React.FC<TableDataProps> = ({
+  callClose,
+  strike,
+  putClose,
+  contracts,
+}) => {
   const selectedExpiry = useStore((state) => state.selectedExpiry);
   const selectedContractItem = useStore((state) => state.selectedContractItem);
   const contractOPT = (contracts && contracts[selectedContractItem]) || {};
@@ -10,7 +16,7 @@ const TableData = ({ callClose, strike, putClose, contracts }) => {
     const expiryOPT = contractOPT.OPT || {};
     const strikeOPT = expiryOPT[selectedExpiry] || [];
 
-    console.log("strike otp is", contractOPT);
+    console.log("strike opt is", contractOPT);
 
     const myStrikeCE = strikeOPT.find(
       (item) => item.option_type === "CE" && item.strike === strike
@@ -32,7 +38,9 @@ const TableData = ({ callClose, strike, putClose, contracts }) => {
         <td id={myCEId} className="py-3 px-6">
           {callClose !== null ? callClose : "-"}
         </td>
-        <td className="py-3 px-6 font-bold">{strike !== null ? strike : "-"}</td>
+        <td className="py-3 px-6 font-bold">
+          {strike !== null ? strike : "-"}
+        </td>
         <td id={myPEId} className="py-3 px-6">
           {putClose !== null ? putClose : "-"}
         </td>

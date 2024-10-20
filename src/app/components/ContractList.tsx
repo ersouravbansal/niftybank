@@ -1,14 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import useStore from "../utils/store";
+import { ContractKeys } from "../types/types";
 
-const ContractList = ({ items }: { items: string[] }) => {
+const ContractList = ({ items }: { items: ContractKeys }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const selectedContractItem = useStore((state) => state.selectedContractItem);
+
   const setSelectedContractItem = useStore(
     (state) => state.setSelectedContractItem
   );
-  const [isOpen, setIsOpen] = useState(false);
-
   const handleSelectChange = (value: string) => {
     setSelectedContractItem(value);
     setIsOpen(false);
@@ -24,9 +25,7 @@ const ContractList = ({ items }: { items: string[] }) => {
             isOpen ? "border border-green-500" : ""
           }`}
         >
-          <span>
-            {selectedContractItem || "Select a Contract"}
-          </span>
+          <span>{selectedContractItem || "Select a Contract"}</span>
           {/* Down arrow icon */}
           <span className="">{isOpen ? "▲" : "▼"}</span>
         </div>
@@ -34,15 +33,13 @@ const ContractList = ({ items }: { items: string[] }) => {
         {/* Dropdown list */}
         {isOpen && (
           <ul className="absolute max-w-xs bg-white shadow-lg rounded-lg mt-1 z-10 md:w-full sm:w-[40vw]">
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <li
                 key={index}
                 className="py-2 px-4 hover:bg-green-100 cursor-pointer text-center"
                 onClick={() => handleSelectChange(item)} // Corrected the event handler
               >
-                <span className="block w-full whitespace-normal">
-                  {item}
-                </span>
+                <span className="block w-full whitespace-normal">{item}</span>
               </li>
             ))}
           </ul>

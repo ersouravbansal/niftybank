@@ -1,6 +1,6 @@
 import { create } from "zustand";
-
-const useStore = create((set) => ({
+import { StoreState } from "../types/types"
+const useStore = create<StoreState>((set) => ({
   contractData: null,
   contractKeys: null,
   optionChainData: null,

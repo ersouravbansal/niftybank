@@ -7,7 +7,7 @@ import useStore from "../utils/store";
 import Spinner from "./Spinner";
 
 const OptionChainTable = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   
   const contractData = useStore((state) => state.contractData);
