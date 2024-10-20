@@ -114,7 +114,7 @@ Contains reusable components used across the application.
 
 **ContractList.tsx**: A dropdown component for selecting contracts.
 **ExpiryDateFilter.tsx**: A button component for filtering options based on expiry dates.
-**Header.tsx**: A header component (content not provided).
+**Header.tsx**: A header component for website.
 **OptionChainTable.tsx**: The main component that renders the option chain table and handles data fetching and WebSocket connections.
 **Spinner.tsx**: A loading spinner component displayed while data is being fetched.
 **TableData.tsx**: Renders individual rows of the option chain table, displaying call and put prices for each strike.
