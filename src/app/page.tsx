@@ -1,9 +1,9 @@
-import Header from "./components/Header"
+import OptionChainTable from "./components/OptionChainTable";
 
 export default function Home() {
   return (
   <>
-  <Header />
+  <OptionChainTable />
   </>
   );
 }
