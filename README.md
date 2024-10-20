@@ -134,3 +134,10 @@ The layout component for the application, defining the layout structure of the a
 
 #### page.tsx: 
 The entry point of the application that renders the main content.
+
+## Integrated Jest for Testing.
+To run test cases, you can use command:
+
+```bash
+    npm run test filename
+```
