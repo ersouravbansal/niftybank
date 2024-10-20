@@ -79,3 +79,58 @@ The project uses Zustand for managing the global state, which includes:
 - optionChainData: Stores option chain data for a selected contract and expiry.
 - selectedContractItem: Keeps track of the currently selected contract.
 - selectedExpiry: Stores the selected expiry date for filtering options.
+
+## Project Structure
+The project is structured into the following folders:
+src
+├── api
+│   └── apiRequest.tsx
+├── app
+│   ├── components
+│   │   ├── ContractList.tsx
+│   │   ├── ExpiryDateFilter.tsx
+│   │   ├── Header.tsx
+│   │   ├── OptionChainTable.tsx
+│   │   ├── Spinner.tsx
+│   │   └── TableData.tsx
+│   ├── types
+│   │   └── types.ts
+│   ├── utils
+│   │   └── store.ts
+│   ├── layout.tsx
+│   └── page.tsx
+
+### Folder Description
+#### api: 
+Contains the API request logic to fetch data from the server.
+
+- **apiRequest.tsx**: This file contains functions to fetch contracts and option chain data.
+
+#### app: 
+The main application folder containing all components, types, and utilities.
+
+#### components: 
+Contains reusable components used across the application.
+
+**ContractList.tsx**: A dropdown component for selecting contracts.
+**ExpiryDateFilter.tsx**: A button component for filtering options based on expiry dates.
+**Header.tsx**: A header component (content not provided).
+**OptionChainTable.tsx**: The main component that renders the option chain table and handles data fetching and WebSocket connections.
+**Spinner.tsx**: A loading spinner component displayed while data is being fetched.
+**TableData.tsx**: Renders individual rows of the option chain table, displaying call and put prices for each strike.
+
+#### types: 
+Contains TypeScript type definitions for better type safety.
+
+**types.ts**: Defines various types used in the application, including contract and option chain data structures.
+
+#### utils: 
+Contains utility functions and state management.
+
+**store.ts**: Contains Zustand store for global state management, including contract data and selected items.
+
+#### layout.tsx: 
+The layout component for the application, defining the layout structure of the app. 
+
+#### page.tsx: 
+The entry point of the application that renders the main content.
